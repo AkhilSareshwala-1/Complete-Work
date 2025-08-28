@@ -1,0 +1,4 @@
+app:has the core py code for doing analysis.
+s:dummy data
+static:has the graph img saved.
+templates:index file for the frontend.
