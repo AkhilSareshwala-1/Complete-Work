@@ -1,0 +1,450 @@
+{
+  "name": "Linkedin Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "56b2db56-90c0-4990-ac4e-d5b9369197f7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1u1IqYlXrL7644StdTfL0J2QEPi_Pwh6wL-nuQXMRtJQ",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Info",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1IqYlXrL7644StdTfL0J2QEPi_Pwh6wL-nuQXMRtJQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1IqYlXrL7644StdTfL0J2QEPi_Pwh6wL-nuQXMRtJQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json.fullName }}",
+            "First Name": "={{ $json.firstName }}",
+            "Last Name": "={{ $json.lastName }}",
+            "LinkedIn URL": "={{ $json.linkedinUrl }}",
+            "Headline": "={{ $json.headline }}",
+            "Job Title": "={{ $json.jobTitle }}",
+            "Company Name": "={{ $json.companyName }}",
+            "Location": "={{ $json.addressWithCountry }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{$json.mobileNumber}}",
+            "Skills": "={{$json.skills}}",
+            "Summary/About": "={{ $json.about }}"
+          },
+          "matchingColumns": [
+            "Full Name"
+          ],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn URL",
+              "displayName": "LinkedIn URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Headline",
+              "displayName": "Headline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary/About",
+              "displayName": "Summary/About",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        440,
+        0
+      ],
+      "id": "c00680e8-f7d7-4d12-84fc-05ee7cff6856",
+      "name": "Employee Info",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "e8C6sRIex1mGVTIN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "15l26kArzVkqitH-q55k4AeLVungXeLyKMAr-UV44Log",
+          "mode": "list",
+          "cachedResultName": "Company_List",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15l26kArzVkqitH-q55k4AeLVungXeLyKMAr-UV44Log/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15l26kArzVkqitH-q55k4AeLVungXeLyKMAr-UV44Log/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company": "={{ $json.title }}",
+            "Category": "={{ $json.categoryName }}",
+            "Address": "={{ $json.address }}",
+            "Website": "={{ $json.website }}",
+            "Phone": "={{ $json.phones }}",
+            "Linkedin": "={{ $json.linkedIns }}",
+            "Email": "={{ $json.emails }}",
+            "Avg_Rate": "={{ $json.peopleAlsoSearch[1].totalScore }}",
+            "Total Reviews": "={{ $json.reviewsCount }}"
+          },
+          "matchingColumns": [
+            "Company"
+          ],
+          "schema": [
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Avg_Rate",
+              "displayName": "Avg_Rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total Reviews",
+              "displayName": "Total Reviews",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Linkedin",
+              "displayName": "Linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        880,
+        0
+      ],
+      "id": "122becd6-05e8-400f-a1e0-2c33aa2ce183",
+      "name": "Company Info",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "e8C6sRIex1mGVTIN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/dev_fusion~linkedin-profile-scraper/run-sync-get-dataset-items?token=apify_api_XXyAn0dqqwkKf4eVa6TSpdilxEUTJ0T4DVq",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"profileUrls\": [\n        \"https://www.linkedin.com/in/arsil-malek/\"\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "e95de501-722e-40ed-859c-93b8d523be34",
+      "name": "Linkedin fetcher"
+    },
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items?token=apify_api_QFV9Q8UmIUstpYTQC09tqGvYZYqnQ1hdrJs",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"language\": \"en\",\n    \"maxCrawledPlacesPerSearch\": 1,\n    \"searchStringsArray\": [\n        \"Hashtechy\"\n    ],\n    \"skipClosedPlaces\": false\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "1c539985-b43e-4483-99e4-03a78eff42fd",
+      "name": "Compnay Fetcher"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an AI assistant from @techy that writes personalized cold emails to companies based on their website.\n\nUse this input:\n- Company Name: {{ $json.Company }}\n- Website: {{ $json.Website }}\n- Sender Name: Max\n- Email: {{ $json.Email }}\n\nTasks:\n1. Analyze the website to understand the company’s services and tone.\n2. Determine if the email is a **person's name** (e.g., kalash@company.com). If yes, use the name in the greeting (e.g., \"Hi Kalash,\"). If the email is generic (e.g., contact@, info@, hello@), then use “Hi Team,”.\n3. Write a **short, professional cold email** pitching AI integration services from @techy — personalized to their website.\n\n⚠️ OUTPUT FORMAT:\nRespond ONLY with raw valid JSON:\n{\n  \"subject\": \"...\",\n  \"body\": \"...\",\n  \"to_email\": \"...\"\n}\n\nRules:\n- Use proper newlines in the body (not \\\\n).\n- Do NOT wrap the response in quotes or markdown.\n- Use \"Max\" as the sender name in the closing.\n- No analysis, no markdown, no explanation — only return a valid JSON object.\n"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "ec3564c8-261b-47b8-95a2-5694cb82ae40",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "biMYJAKGv25ZzXJK",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Linkedin fetcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Employee Info": {
+      "main": [
+        []
+      ]
+    },
+    "Company Info": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Linkedin fetcher": {
+      "main": [
+        [
+          {
+            "node": "Employee Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compnay Fetcher": {
+      "main": [
+        []
+      ]
+    },
+    "Message a model": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "04fa2415-8cc0-4c2a-8d11-a9be4d0651af",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "526af9b1a89ecafc7690a00f61b047d448e8ad2505e2978867a85f2403b8696a"
+  },
+  "id": "TBkDVWCbo4xAr0LY",
+  "tags": []
+}
