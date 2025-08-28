@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TradeVision Pro - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0b0d10, #13151a);
+      color: #f5f6f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-text { color: #ffc94d; }
+    .card {
+      background: rgba(20, 22, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th {
+      background: linear-gradient(to right, #1b1d22, #23262d);
+      color: #ffc94d;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    tr:hover {
+      background: rgba(255, 201, 77, 0.05);
+      transition: background 0.25s ease;
+    }
+    /* Align first column left and others right */
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    th:not(:first-child), td:not(:first-child) {
+      text-align: right;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#101215]/90 border-b border-[#202226] px-6 py-4 flex items-center justify-between shadow-lg backdrop-blur-lg">
+    <div class="flex items-center gap-3">
+      <!-- Inline SVG Logo -->
+      <svg
+        width="140"
+        height="32"
+        viewBox="0 0 280 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="TradeVision Pro Logo"
+        class="inline-block"
+      >
+        <!-- Candlestick-style icon -->
+        <rect x="4" y="4" width="8" height="32" rx="2" fill="#ffc94d"/>
+        <rect x="16" y="12" width="8" height="24" rx="2" fill="#34d399"/>
+        <rect x="28" y="16" width="8" height="20" rx="2" fill="#ef4444"/>
+
+        <!-- Brand Name -->
+        <text x="48" y="34" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="white" style="user-select:none;">
+          Trade<tspan fill="#ffc94d">Vision</tspan> Pro
+        </text>
+      </svg>
+
+      <div>
+        <h3 class="text-s text-gray-400 italic">Welcome, {{ profile.user_name }}</h3>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <span class="text-sm text-gray-300 font-medium">{{ now }}</span>
+      <a href="{{ url_for('portfolio_logout') }}" 
+         class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-5 py-2 rounded-md text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105">
+         Logout
+      </a>
+    </div>
+  </nav>
+
+  <!-- Summary Metrics -->
+  <section class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="card p-5">
+      <h2 class="text-xs font-medium text-gray-400 uppercase">Portfolio Value</h2>
+      <p class="mt-2 text-3xl font-extrabold text-green-400 tracking-wide">₹{{ format_currency(summary.total_value) }}</p>
+    </div>
+    <div class="card p-5">
+      <h2 class="text-xs font-medium text-gray-400 uppercase">Total Equity</h2>
+      <p class="mt-2 text-3xl font-extrabold text-blue-400">₹{{ format_currency(summary.total_equity) }}</p>
+    </div>
+    <div class="card p-5">
+      <h2 class="text-xs font-medium text-gray-400 uppercase">Available Margin</h2>
+      <p class="mt-2 text-3xl font-extrabold text-yellow-400">₹{{ format_currency(summary.available_margin) }}</p>
+    </div>
+    <div class="card p-5">
+      <h2 class="text-xs font-medium text-gray-400 uppercase">Total P&amp;L</h2>
+      <p class="mt-2 text-3xl font-extrabold {% if summary.total_pnl >=0 %}text-green-400{% else %}text-red-400{% endif %}">
+        ₹{{ format_currency(summary.total_pnl) }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Holdings Table -->
+  <section class="p-6">
+    <div class="card p-6">
+      <h2 class="text-lg font-bold gold-text mb-4 border-b border-gray-700 pb-2">📊 Holdings</h2>
+      {% if holdings %}
+      <div class="overflow-x-auto">
+        <table class="text-sm">
+          <thead>
+            <tr>
+              <th class="px-4 py-3">Symbol</th>
+              <th class="px-4 py-3">Qty</th>
+              <th class="px-4 py-3">LTP</th>
+              <th class="px-4 py-3">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in holdings %}
+            <tr>
+              <td class="border-t border-gray-800 px-4 py-3 font-medium">{{ h.tradingsymbol }}</td>
+              <td class="border-t border-gray-800 px-4 py-3">{{ h.quantity }}</td>
+              <td class="border-t border-gray-800 px-4 py-3 text-blue-400 font-semibold">₹{{ format_currency(h.last_price) }}</td>
+              <td class="border-t border-gray-800 px-4 py-3 text-green-400 font-semibold">₹{{ format_currency(h.last_price * h.quantity) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-gray-500 italic">No holdings available.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Positions Table -->
+  <section class="p-6">
+    <div class="card p-6">
+      <h2 class="text-lg font-bold gold-text mb-4 border-b border-gray-700 pb-2">📈 Positions</h2>
+      {% if positions.net %}
+      <div class="overflow-x-auto">
+        <table class="text-sm">
+          <thead>
+            <tr>
+              <th class="px-4 py-3">Symbol</th>
+              <th class="px-4 py-3">Qty</th>
+              <th class="px-4 py-3">Buy Price</th>
+              <th class="px-4 py-3">LTP</th>
+              <th class="px-4 py-3">P&amp;L</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in positions.net %}
+            <tr>
+              <td class="border-t border-gray-800 px-4 py-3 font-medium">{{ p.tradingsymbol }}</td>
+              <td class="border-t border-gray-800 px-4 py-3">{{ p.quantity }}</td>
+              <td class="border-t border-gray-800 px-4 py-3 text-yellow-400 font-semibold">₹{{ format_currency(p.buy_price) }}</td>
+              <td class="border-t border-gray-800 px-4 py-3 text-blue-400 font-semibold">₹{{ format_currency(p.last_price) }}</td>
+              <td class="border-t border-gray-800 px-4 py-3 {% if p.pnl >=0 %}text-green-400{% else %}text-red-400{% endif %} font-semibold">
+                ₹{{ format_currency(p.pnl) }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-gray-500 italic">No positions available.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Orders Table -->
+  <section class="p-6 pb-12">
+    <div class="card p-6">
+      <h2 class="text-lg font-bold gold-text mb-4 border-b border-gray-700 pb-2">📝 Orders</h2>
+      {% if orders %}
+      <div class="overflow-x-auto">
+        <table class="text-sm">
+          <thead>
+            <tr>
+              <th class="px-3 py-2">Order ID</th>
+              <th class="px-3 py-2">Symbol</th>
+              <th class="px-3 py-2">Qty</th>
+              <th class="px-3 py-2">Price</th>
+              <th class="px-3 py-2">Status</th>
+              <th class="px-3 py-2">Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+            <tr>
+              <td class="border-t border-gray-800 px-3 py-2">{{ o.order_id }}</td>
+              <td class="border-t border-gray-800 px-3 py-2">{{ o.tradingsymbol }}</td>
+              <td class="border-t border-gray-800 px-3 py-2">{{ o.quantity }}</td>
+              <td class="border-t border-gray-800 px-3 py-2 text-yellow-400 font-semibold">₹{{ o.price }}</td>
+              <td class="border-t border-gray-800 px-3 py-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold tracking-wide
+                  {% if o.status|lower == 'complete' %}bg-green-500/20 text-green-400
+                  {% elif o.status|lower in ['rejected','cancelled'] %}bg-red-500/20 text-red-400
+                  {% else %}bg-blue-500/20 text-blue-400{% endif %}">
+                  {{ o.status }}
+                </span>
+              </td>
+              <td class="border-t border-gray-800 px-3 py-2">{{ o.order_type }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-gray-500 italic">No orders found.</p>
+      {% endif %}
+    </div>
+  </section>
+
+</body>
+</html>

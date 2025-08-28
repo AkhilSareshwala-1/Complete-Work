@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Trading Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .login-container {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+    .glow-text {
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+    }
+    .input-field {
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="login-container rounded-lg shadow-xl overflow-hidden">
+        <div class="p-8">
+          <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white glow-text">TradeVision Pro</h1>
+            <p class="mt-2 text-blue-200">Professional Trading Dashboard</p>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">API Login</h2>
+            
+            {% if error %}
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded" role="alert">
+              <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span class="font-medium">Error:</span> {{ error }}
+              </div>
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/portfolio/login">
+              <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="api_key">
+                  <i class="fas fa-key mr-1"></i> API Key
+                </label>
+                <input class="input-field shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none" 
+                       id="api_key" name="api_key" type="text" placeholder="Enter your API key" required>
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="access_token">
+                  <i class="fas fa-lock mr-1"></i> Access Token
+                </label>
+                <input class="input-field shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none" 
+                       id="access_token" name="access_token" type="text" placeholder="Enter your access token" required>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 flex items-center justify-center" 
+                        type="submit">
+                  <i class="fas fa-sign-in-alt mr-2"></i> Connect to Kite
+                </button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="mt-6 text-center">
+            <p class="text-xs text-blue-200">
+              <i class="fas fa-shield-alt mr-1"></i> Your credentials are secured and never stored
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

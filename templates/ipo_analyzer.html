@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IPO Analyzer - TradeVision Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0b0d10, #13151a);
+      color: #f5f6f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-text { color: #ffc94d; }
+    .card {
+      background: rgba(20, 22, 26, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover { transform: scale(1.015); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
+    pre { white-space: pre-wrap; word-break: break-word; font-size: 0.95rem; line-height: 1.6; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.25rem; }
+
+    /* === Floating Chat Bot === */
+    .chat-toggle {
+      background: #ffc94d; color: #0b0d10; width: 56px; height: 56px; border-radius: 9999px;
+      position: fixed; bottom: 24px; right: 24px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 50;
+    }
+    .chat-box {
+      position: fixed; bottom: 90px; right: 24px; width: 380px; background: rgba(27, 29, 34, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem; box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      padding: 1rem; z-index: 100; backdrop-filter: blur(12px);
+      transform: scaleY(0); transform-origin: bottom; opacity: 0;
+      transition: all 0.3s ease;
+      display: flex; flex-direction: column;
+    }
+    .chat-box.active { transform: scaleY(1); opacity: 1; }
+    #chatHistory { flex: 1; overflow-y: auto; }
+    .chat-input-container { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+    #chatHistory div { padding: 0.5rem 0.75rem; border-radius: 0.75rem; margin-bottom: 0.5rem;
+      max-width: 85%; word-wrap: break-word; font-size: 0.9rem; line-height: 1.4; }
+    #chatHistory .user { background: linear-gradient(to right, #ffc94d, #facc15); color: #0b0d10; margin-left: auto; text-align: right; }
+    #chatHistory .bot { background: #2f323b; color: #f5f6f7; margin-right: auto; text-align: left; }
+    textarea#chatInput { height: 3.5rem; min-height: 3.5rem; max-height: 6rem; line-height: 1.4rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#101215]/90 border-b border-[#202226] px-6 py-4 flex items-center justify-between shadow-lg backdrop-blur-lg">
+    <a href="/" class="text-lg font-semibold gold-text hover:underline">← Back</a>
+    <h1 class="text-3xl font-extrabold gold-text">🚀 IPO Analyzer</h1>
+  </nav>
+
+  <!-- Main -->
+  <main class="flex-grow p-6">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center gold-text mb-8">🧠 Smart IPO Insights & Suggestions</h2>
+
+      {% if ipo_entries %}
+        <div class="space-y-8">
+          {% for entry in ipo_entries %}
+            <div x-data="{ open: false }" class="card p-6">
+              <div class="flex items-center justify-between mb-3 text-sm text-gray-400">
+                <span>📅 {{ entry.timestamp }}</span>
+                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs">Latest Update</span>
+              </div>
+
+              <!-- Suggestion as Toggle Button -->
+              <button @click="open = !open" class="text-left w-full">
+                <h3 class="text-2xl font-bold gold-text hover:underline transition duration-200">
+                  💡 {{ entry.suggestion }}
+                </h3>
+              </button>
+
+              <!-- Dropdown Details -->
+              <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                   x-transition:enter-start="opacity-0 scale-95"
+                   x-transition:enter-end="opacity-100 scale-100"
+                   x-transition:leave="transition ease-in duration-200"
+                   x-transition:leave-start="opacity-100 scale-100"
+                   x-transition:leave-end="opacity-0 scale-95"
+                   class="mt-4 space-y-4 text-gray-300">
+
+                {% if entry.reasoning %}
+                  {% set parts = entry.reasoning.split('**') %}
+                  {% for part in parts %}
+                    {% if part.strip().startswith('Hot/Upcoming IPOs:') %}
+                      <h4 class="mt-5 mb-2 text-white font-semibold text-xl">📈 Hot/Upcoming IPOs</h4>
+                    {% elif part.strip().startswith('Recently Listed IPOs') %}
+                      <h4 class="mt-5 mb-2 text-white font-semibold text-xl">📊 Recently Listed IPOs</h4>
+                    {% elif part.strip().startswith('Investment Tips') %}
+                      <h4 class="mt-5 mb-2 text-yellow-400 font-semibold text-xl">💡 Investment Tips</h4>
+                    {% elif part.strip().startswith('Caution on') %}
+                      <h4 class="mt-5 mb-2 text-red-400 font-semibold text-xl">⚠️ Caution</h4>
+                    {% elif part.strip().startswith('Sources') %}
+                      <h4 class="mt-5 mb-2 text-gray-400 font-semibold text-xl">🔗 Sources</h4>
+                    {% elif '—' in part %}
+                      <div class="card bg-[#1f2229] p-4 mb-3 border border-[#2d2f36]">
+                        <pre class="text-sm text-gray-200">{{ part.strip() }}</pre>
+                      </div>
+                    {% else %}
+                      <p class="text-base leading-relaxed mb-3">{{ part.strip() }}</p>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center text-gray-400">🚫 No IPO data available at the moment.</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#101215]/90 border-t border-[#202226] px-6 py-4 text-center text-gray-400 text-sm">
+    © 2025 TradeVision Pro. IPO Data sourced from Moneycontrol & Chittorgarh.
+  </footer>
+
+  <!-- Floating Chat Bot Trigger -->
+  <div class="chat-toggle" onclick="toggleChat()">💬</div>
+
+  <!-- Floating Chat Bot -->
+  <div id="chatBox" class="chat-box">
+    <h4 class="font-bold text-lg gold-text mb-3 text-center">✨ Your Trading Copilot 🚀</h4>
+    <div id="chatHistory" class="mb-3 bg-[#22242a]/70 rounded-lg p-3 overflow-y-auto"
+         style="max-height:280px; min-height:120px;"></div>
+    <div class="chat-input-container">
+      <textarea id="chatInput"
+        class="flex-grow p-3 bg-[#2c2f36] text-sm text-white rounded-lg resize-none
+               focus:outline-none focus:ring-2 focus:ring-[#ffc94d]"
+        placeholder="Ask me about IPOs, markets, or strategies..."></textarea>
+      <button id="sendBtn"
+        class="shrink-0 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-semibold
+               px-4 py-2 rounded-lg shadow-md hover:from-yellow-400 hover:to-orange-400 transition">
+        Send
+      </button>
+    </div>
+    <p class="text-xs text-gray-400 mt-3 text-center">AI-powered assistant for IPO & market insights.</p>
+    <p id="modelTag" class="text-[10px] text-gray-500 mt-1 text-center"></p>
+  </div>
+
+  <script>
+    function toggleChat() {
+      document.getElementById('chatBox').classList.toggle('active');
+    }
+    const sendBtn = document.getElementById('sendBtn');
+    const chatInput = document.getElementById('chatInput');
+    const chatHistory = document.getElementById('chatHistory');
+    const modelTag = document.getElementById('modelTag');
+
+    if (sendBtn && chatInput) {
+      sendBtn.addEventListener('click', sendMessage);
+      chatInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+      });
+    }
+
+    async function sendMessage() {
+      const msg = (chatInput.value || '').trim();
+      if (!msg) return;
+
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user';
+      userDiv.textContent = msg;
+      chatHistory.appendChild(userDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+      chatInput.value = '';
+
+      const botDiv = document.createElement('div');
+      botDiv.className = 'bot';
+      botDiv.textContent = '⏳ Thinking...';
+      chatHistory.appendChild(botDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      try {
+        const res = await fetch('/chatbot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: msg })
+        });
+        const data = await res.json();
+        botDiv.textContent = (data && data.response) ? data.response : 'Sorry, no reply.';
+        if (data && data.model) modelTag.textContent = 'Model: ' + data.model;
+      } catch (err) {
+        botDiv.textContent = '⚠️ Error processing request.';
+      } finally {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>

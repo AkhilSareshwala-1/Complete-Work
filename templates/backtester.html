@@ -1,0 +1,254 @@
+<!-- backtester.html (enhanced with the same floating chat bot as index.html) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Backtester | TradeVision Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0b0d10, #13151a);
+      color: #f5f6f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-text { color: #ffc94d; }
+    .card {
+      background: rgba(20, 22, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover { transform: translateY(-4px) scale(1.01); }
+
+    /* Date input + icon */
+    .date-input-wrapper { position: relative; display: inline-block; width: 250px; }
+    #date { width: 100%; padding-right: 2.5rem; }
+    .calendar-icon {
+      position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+      pointer-events: none; stroke: #9ca3af; stroke-width: 1.5; width: 20px; height: 20px; opacity: 0.7; transition: stroke 0.3s ease;
+    }
+    #date:focus + .calendar-icon { stroke: #60a5fa; opacity: 1; }
+
+    /* === Floating Chat Bot (same look/feel as index.html) === */
+    .chat-toggle {
+      background: #ffc94d; color: #0b0d10; width: 56px; height: 56px; border-radius: 9999px;
+      position: fixed; bottom: 24px; right: 24px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 50;
+    }
+    
+
+  .chat-box {
+    position: fixed;
+    bottom: 90px;
+    right: 24px;
+    width: 380px;
+    background: rgba(27, 29, 34, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    padding: 1rem;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+
+    /* start hidden */
+    transform: scaleY(0);
+    transform-origin: bottom;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .chat-box.active {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+
+    .chat-box { display: flex; flex-direction: column; }
+    #chatHistory { flex: 1; overflow-y: auto; }
+    .chat-input-container { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+    #chatHistory div { padding: 0.5rem 0.75rem; border-radius: 0.75rem; margin-bottom: 0.5rem; max-width: 85%; word-wrap: break-word; animation: fadeIn 0.25s ease; font-size: 0.9rem; line-height: 1.4; }
+    #chatHistory .user { background: linear-gradient(to right, #ffc94d, #facc15); color: #0b0d10; margin-left: auto; text-align: right; }
+    #chatHistory .bot { background: #2f323b; color: #f5f6f7; margin-right: auto; text-align: left; }
+    textarea#chatInput { height: 3.5rem; min-height: 3.5rem; max-height: 6rem; line-height: 1.4rem; }
+    @keyframes fadeIn { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform: translateY(0);} }
+    @keyframes fadeInUp { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-[#101215]/90 border-b border-[#202226] px-6 py-4 flex items-center justify-between shadow-lg backdrop-blur-lg">
+    <div class="flex items-center gap-3">
+      <div>
+        <!-- Logo -->
+        <svg width="220" height="48" viewBox="0 0 280 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TradeVision Pro Logo" class="inline-block">
+          <rect x="4" y="4" width="8" height="32" rx="2" fill="#ffc94d"/>
+          <rect x="16" y="12" width="8" height="24" rx="2" fill="#34d399"/>
+          <rect x="28" y="16" width="8" height="20" rx="2" fill="#ef4444"/>
+          <text x="48" y="34" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="white" style="user-select:none;">
+            Trade<tspan fill="#ffc94d">Vision</tspan> Pro
+          </text>
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <main class="p-6 max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold gold-text mb-6">📉 Strategy Backtesting</h2>
+
+    <form method="POST" class="mb-6">
+      <label for="date" class="block text-sm font-medium mb-2">Select Backtest Date:</label>
+      <div class="date-input-wrapper">
+        <input type="text" name="date" id="date" required class="bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Select a date" autocomplete="off" />
+        <svg class="calendar-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <button type="submit" class="ml-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow-md transition">Run Backtest</button>
+    </form>
+
+    {% if results %}
+    <div class="card p-6 mb-8">
+      <h3 class="text-xl font-semibold gold-text mb-4">Backtest Results for {{ date }}</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr>
+              <th class="text-left py-2 px-3">Company</th>
+              <th class="text-right py-2 px-3">Buy</th>
+              <th class="text-right py-2 px-3">Sell</th>
+              <th class="text-right py-2 px-3">Stop Loss</th>
+              <th class="text-right py-2 px-3">Low</th>
+              <th class="text-right py-2 px-3">High</th>
+              <th class="text-center py-2 px-3">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in results %}
+            <tr class="border-t border-gray-700">
+              <td class="py-2 px-3">{{ r.Company }}</td>
+              <td class="py-2 px-3 text-right text-yellow-400">₹{{ "%.2f"|format(r.Buy_Price) if r.Buy_Price is not none else "N/A" }}</td>
+              <td class="py-2 px-3 text-right text-green-400">₹{{ "%.2f"|format(r.Sell_Price) if r.Sell_Price is not none else "N/A" }}</td>
+              <td class="py-2 px-3 text-right text-red-400">₹{{ "%.2f"|format(r.Stop_Loss) if r.Stop_Loss is not none else "N/A" }}</td>
+              <td class="py-2 px-3 text-right">{{ "₹%.2f"|format(r.Low) if r.Low is not none else "N/A" }}</td>
+              <td class="py-2 px-3 text-right">{{ "₹%.2f"|format(r.High) if r.High is not none else "N/A" }}</td>
+              <td class="py-2 px-3 text-center">{{ r.Status }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if analysis %}
+    <div class="card p-6">
+      <h3 class="text-xl font-semibold gold-text mb-4">📊 Price Comparison Chart</h3>
+      <canvas id="backtestChart" class="w-full h-96"></canvas>
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- Floating Chat Bot Trigger -->
+  <div class="chat-toggle" onclick="toggleChat()">💬</div>
+
+  <!-- Floating Chat Bot -->
+  <div id="chatBox" class="chat-box">
+    <h4 class="font-bold text-lg gold-text mb-3 text-center">✨ Your Trading Copilot 🚀</h4>
+    <div id="chatHistory" class="mb-3 bg-[#22242a]/70 rounded-lg p-3 overflow-y-auto" style="max-height:280px; min-height:120px; backdrop-filter: blur(6px);"></div>
+    <div class="chat-input-container">
+      <textarea id="chatInput" class="flex-grow p-3 bg-[#2c2f36] text-sm text-white rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#ffc94d] overflow-hidden" placeholder="Ask me about backtests, stocks, or strategies..."></textarea>
+      <button id="sendBtn" class="shrink-0 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-semibold px-4 py-2 rounded-lg shadow-md hover:from-yellow-400 hover:to-orange-400 transition">Send</button>
+    </div>
+    <p class="text-xs text-gray-400 mt-3 text-center">AI-powered assistant for trading insights & guidance.</p>
+    <p id="modelTag" class="text-[10px] text-gray-500 mt-1 text-center"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Date picker
+    flatpickr("#date", { dateFormat: "Y-m-d", defaultDate: new Date(), maxDate: "today", disableMobile: true });
+
+    // Chat bot logic (mirrors index.html)
+    function toggleChat() {
+      const chat = document.getElementById('chatBox');
+      chat.classList.toggle('active');
+    }
+    const sendBtn = document.getElementById('sendBtn');
+    const chatInput = document.getElementById('chatInput');
+    const chatHistory = document.getElementById('chatHistory');
+    const modelTag = document.getElementById('modelTag');
+
+    if (sendBtn && chatInput) {
+      sendBtn.addEventListener('click', sendMessage);
+      chatInput.addEventListener('keydown', function(e){ if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }});
+    }
+
+    async function sendMessage() {
+      const msg = (chatInput.value || '').trim();
+      if (!msg) return;
+
+      // user bubble
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user';
+      userDiv.textContent = msg;
+      chatHistory.appendChild(userDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+      chatInput.value = '';
+
+      // bot typing bubble
+      const botDiv = document.createElement('div');
+      botDiv.className = 'bot';
+      botDiv.textContent = '⏳ Thinking...';
+      chatHistory.appendChild(botDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      try {
+        const res = await fetch('/chatbot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: msg })
+        });
+        const data = await res.json();
+        const text = (data && data.response) ? data.response : 'Sorry, no reply.';
+        botDiv.textContent = text;
+        if (data && data.model) modelTag.textContent = 'Model: ' + data.model;
+      } catch (err) {
+        botDiv.textContent = '⚠️ Error processing request.';
+      } finally {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+    }
+  </script>
+
+  {% if analysis %}
+  <script>
+    const ctx = document.getElementById('backtestChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ analysis.companies | safe }},
+        datasets: [
+          { label: 'Actual Low', data: {{ analysis.lows | safe }}, backgroundColor: 'rgba(255, 99, 132, 0.6)' },
+          { label: 'Actual High', data: {{ analysis.highs | safe }}, backgroundColor: 'rgba(75, 192, 192, 0.6)' },
+          { label: 'Buy Price', data: {{ analysis.buy_prices | safe }}, backgroundColor: 'rgba(255, 206, 86, 0.6)' },
+          { label: 'Sell Price', data: {{ analysis.sell_prices | safe }}, backgroundColor: 'rgba(54, 162, 235, 0.6)' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#fff' } } },
+        scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } }
+      }
+    });
+  </script>
+  {% endif %}
+</body>
+</html>
