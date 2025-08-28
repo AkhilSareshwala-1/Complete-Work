@@ -1,4 +1,3 @@
-app:main file for complete MVP.
-gs:get's gsheets data and makes txt file.
-cred:its the credentials needed to connect to gsheets.
-templates:all html files for frontend.
+trading:the strategy based trading rec.
+hist:kite login and generating access token.
+news_sentiment:for getting rss feeds.
