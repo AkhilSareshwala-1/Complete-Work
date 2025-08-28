@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Survey Data Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen text-gray-800">
+  <div class="max-w-7xl mx-auto p-6">
+    
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-center mb-6 text-indigo-700">📊 Survey Data Dashboard</h1>
+    
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
+      <div class="bg-white shadow-md rounded-xl p-5 text-center">
+        <h2 class="text-lg font-semibold text-gray-600">Responses</h2>
+        <p class="text-2xl font-bold text-indigo-600">{{ total_responses }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-xl p-5 text-center">
+        <h2 class="text-lg font-semibold text-gray-600">Departments</h2>
+        <p class="text-2xl font-bold text-indigo-600">{{ total_departments }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-xl p-5 text-center">
+        <h2 class="text-lg font-semibold text-gray-600">LLMs Used</h2>
+        <p class="text-2xl font-bold text-indigo-600">{{ total_llms }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-xl p-5 text-center">
+        <h2 class="text-lg font-semibold text-gray-600">AI Tools Used</h2>
+        <p class="text-2xl font-bold text-indigo-600">{{ total_tools }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-xl p-5 text-center">
+        <h2 class="text-lg font-semibold text-gray-600">Avg. Prompt Length</h2>
+        <p class="text-2xl font-bold text-indigo-600">{{ avg_prompt_length }}</p>
+      </div>
+    </div>
+    
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white shadow-lg rounded-xl p-4">
+        <h3 class="text-lg font-bold text-gray-700 mb-2">Department Distribution</h3>
+        <img src="/static/{{ dept_chart }}" alt="Department Chart" class="rounded-lg shadow-md w-full">
+      </div>
+      <div class="bg-white shadow-lg rounded-xl p-4">
+        <h3 class="text-lg font-bold text-gray-700 mb-2">LLM Usage</h3>
+        <img src="/static/{{ llm_chart }}" alt="LLM Chart" class="rounded-lg shadow-md w-full">
+      </div>
+      
+    </div>
+
+    <!-- Detailed Breakdown -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Department Table -->
+      <div class="bg-white shadow-lg rounded-xl p-4">
+        <h3 class="text-lg font-bold text-gray-700 mb-4">Departments</h3>
+        <table class="w-full border border-gray-200 rounded-lg text-sm">
+          <thead class="bg-indigo-100">
+            <tr>
+              <th class="p-2 text-left">Department</th>
+              <th class="p-2 text-right">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dept, count in dept_count.items() %}
+            <tr class="border-t">
+              <td class="p-2">{{ dept }}</td>
+              <td class="p-2 text-right">{{ count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- LLM Table -->
+      <div class="bg-white shadow-lg rounded-xl p-4">
+        <h3 class="text-lg font-bold text-gray-700 mb-4">LLMs Used</h3>
+        <table class="w-full border border-gray-200 rounded-lg text-sm">
+          <thead class="bg-green-100">
+            <tr>
+              <th class="p-2 text-left">LLM</th>
+              <th class="p-2 text-right">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for llm, count in llm_usage.items() %}
+            <tr class="border-t">
+              <td class="p-2">{{ llm }}</td>
+              <td class="p-2 text-right">{{ count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Tools Table -->
+      <div class="bg-white shadow-lg rounded-xl p-4">
+        <h3 class="text-lg font-bold text-gray-700 mb-4">AI Tools Used</h3>
+        <table class="w-full border border-gray-200 rounded-lg text-sm">
+          <thead class="bg-red-100">
+            <tr>
+              <th class="p-2 text-left">Tool</th>
+              <th class="p-2 text-right">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tool, count in tool_usage.items() %}
+            <tr class="border-t">
+              <td class="p-2">{{ tool }}</td>
+              <td class="p-2 text-right">{{ count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-sm text-gray-500">
+      Built with ❤️ using Flask, Pandas & Matplotlib
+    </footer>
+  </div>
+</body>
+</html>
