@@ -1,0 +1,260 @@
+{
+  "name": "kite_connect",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -100
+      ],
+      "id": "46e38d74-a915-4e17-9ace-4d6160af6558",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.kite.trade/instruments/historical/{{ $json.instrument_token }}/10minute?from=2025-07-29%2009:15:00&to=2025-07-29%2014:30:00 ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "token fispy0ikjo710gqt:fbocvTKCpWW5fYc27DkzirX46RLMWMiW"
+            },
+            {
+              "name": "X-Kite-Version",
+              "value": "3"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "3e053c51-dcf5-4c1e-b9a2-5b7958be581a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1qSRsTQmtYUXt96HdsDgyXI4Sn3XFv_3ZBqU0fkpxz-A",
+          "mode": "list",
+          "cachedResultName": "Final_trading-1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qSRsTQmtYUXt96HdsDgyXI4Sn3XFv_3ZBqU0fkpxz-A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qSRsTQmtYUXt96HdsDgyXI4Sn3XFv_3ZBqU0fkpxz-A/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -280,
+        -100
+      ],
+      "id": "9836bdff-f6ed-4189-8d80-2de3ea169256",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "e8C6sRIex1mGVTIN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1mFWlTYxAyGsF6ejC3Wct1zLtFPRFjUf42zU7rcc6A_U",
+          "mode": "list",
+          "cachedResultName": "Historical",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mFWlTYxAyGsF6ejC3Wct1zLtFPRFjUf42zU7rcc6A_U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 800297786,
+          "mode": "list",
+          "cachedResultName": "sheet-1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mFWlTYxAyGsF6ejC3Wct1zLtFPRFjUf42zU7rcc6A_U/edit#gid=800297786"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.time }}",
+            "O": "={{ $json.open }}",
+            "H": "={{ $json.high }}",
+            "L": "={{ $json.low }}",
+            "C": "={{ $json.close }}",
+            "Volume": "={{ $json.volume }}"
+          },
+          "matchingColumns": [
+            "Date"
+          ],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "O",
+              "displayName": "O",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H",
+              "displayName": "H",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "L",
+              "displayName": "L",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "C",
+              "displayName": "C",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Volume",
+              "displayName": "Volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        280,
+        -100
+      ],
+      "id": "149faa41-2a3a-4325-a9f7-fc85a52afc62",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "e8C6sRIex1mGVTIN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nfor (const item of items) {\n  const candles = item.json.data?.candles || [];\n  \n  for (const candle of candles) {\n    output.push({\n      json: {\n        time: candle[0],\n        open: candle[1],\n        high: candle[2],\n        low: candle[3],\n        close: candle[4],\n        volume: candle[5]\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        120,
+        -100
+      ],
+      "id": "cce30509-33a3-4269-b34e-3377fed33794",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "990db2dd-98ca-47e2-979d-89a7616efa90",
+  "meta": {
+    "templateId": "2642",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "526af9b1a89ecafc7690a00f61b047d448e8ad2505e2978867a85f2403b8696a"
+  },
+  "id": "rItmYtsb0YjeBftl",
+  "tags": []
+}

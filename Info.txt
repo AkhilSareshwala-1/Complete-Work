@@ -1,3 +1,2 @@
-trading:the strategy based trading rec.
-hist:kite login and generating access token.
-news_sentiment:for getting rss feeds.
+kite_connect:connects to kite in n8n.
+Linked_Automation:gets users linkedin Info from LinkedIn through Apify.
