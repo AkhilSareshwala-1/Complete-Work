@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TradeVision Pro - Unified Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0b0d10, #13151a);
+      color: #f5f6f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-text { color: #ffc94d; }
+    .card {
+      background: rgba(20, 22, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+    }
+    /* Chat styles */
+    .chat-toggle {
+      background: #ffc94d;
+      color: #0b0d10;
+      width: 56px;
+      height: 56px;
+      border-radius: 9999px;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 50;
+    }
+    .chat-box {
+  display: flex;
+  flex-direction: column;
+}
+
+#chatHistory {
+  flex: 1; /* fills available space */
+  overflow-y: auto;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+#chatHistory div {
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.6rem;
+  max-width: 90%;
+  word-wrap: break-word;
+  animation: fadeIn 0.25s ease;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+textarea#chatInput {
+  height: 3.5rem;
+  min-height: 3.5rem;
+  max-height: 6rem;
+  line-height: 1.4rem;
+}
+
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#101215]/90 border-b border-[#202226] px-6 py-4 flex items-center justify-between shadow-lg backdrop-blur-lg">
+    <div class="flex items-center gap-3">
+      <div>
+        <!-- Logo SVG -->
+        <svg width="220" height="48" viewBox="0 0 280 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TradeVision Pro Logo">
+          <rect x="4" y="4" width="8" height="32" rx="2" fill="#ffc94d"/>
+          <rect x="16" y="12" width="8" height="24" rx="2" fill="#34d399"/>
+          <rect x="28" y="16" width="8" height="20" rx="2" fill="#ef4444"/>
+          <text x="48" y="34" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="white" style="user-select:none;">
+            Trade<tspan fill="#ffc94d">Vision</tspan> Pro
+          </text>
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow p-8">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold gold-text mb-8 text-center">Welcome to TradeVision Pro</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Portfolio Tracker -->
+        <a href="/portfolio/login" class="card p-6 text-center block hover:no-underline">
+          <div class="text-4xl mb-4">📊</div>
+          <h3 class="text-xl font-bold gold-text mb-2">Portfolio Tracker</h3>
+          <p class="text-gray-300">Monitor your holdings, positions, and orders in real-time with Zerodha KiteConnect integration.</p>
+          <div class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md inline-block">Access Portfolio</div>
+        </a>
+
+        <!-- Trade Analyzer -->
+        <a href="/delivery-suggestions" class="card p-6 text-center block hover:no-underline">
+          <div class="text-4xl mb-4">📈</div>
+          <h3 class="text-xl font-bold gold-text mb-2">Delivery Suggestions</h3>
+          <p class="text-gray-300">Analyze your trading performance with detailed charts, sector analysis, and profit/loss metrics.</p>
+          <div class="mt-4 bg-green-600 text-white py-2 px-4 rounded-md inline-block">Delivery Suggestions</div>
+        </a>
+
+        <!-- Backtester -->
+        <a href="/backtest" class="card p-6 text-center block hover:no-underline">
+          <div class="text-4xl mb-4">🔍</div>
+          <h3 class="text-xl font-bold gold-text mb-2">Strategy Backtester</h3>
+          <p class="text-gray-300">Test your trading strategies against historical data to evaluate performance and optimize your approach.</p>
+          <div class="mt-4 bg-purple-600 text-white py-2 px-4 rounded-md inline-block">Backtest Strategy</div>
+        </a>
+
+        <!-- IPO Analyzer -->
+        <a href="/ipo-analyzer" class="card p-6 text-center block hover:no-underline">
+          <div class="text-4xl mb-4">🧾</div>
+          <h3 class="text-xl font-bold gold-text mb-2">IPO Analyzer</h3>
+          <p class="text-gray-300">Analyze upcoming IPOs with company insights, financials, risk factors, and expert ratings.</p>
+          <div class="mt-4 bg-yellow-600 text-white py-2 px-4 rounded-md inline-block">Explore IPOs</div>
+        </a>
+      </div>
+
+      <!-- About Section -->
+      <div class="mt-12 card p-8">
+        <h3 class="text-2xl font-bold gold-text mb-4">About TradeVision Pro</h3>
+        <p class="text-gray-300 mb-4">
+          TradeVision Pro is a comprehensive trading platform that brings together portfolio tracking,
+          trade analysis, and strategy backtesting in one unified interface.
+        </p>
+        <p class="text-gray-300">
+          Whether you're a day trader, swing trader, or long-term investor, our tools help you make
+          informed decisions and optimize your trading performance.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#101215]/90 border-t border-[#202226] px-6 py-4 text-center text-gray-400 text-sm">
+    <p>© 2023 TradeVision Pro. All rights reserved. | Powered by Zerodha KiteConnect API</p>
+  </footer>
+
+  <!-- Chatbot Toggle Button -->
+  <div class="chat-toggle" onclick="toggleChat()">💬</div>
+
+  <!-- Chatbot Box -->
+  <div id="chatBox" class="chat-box">
+    <h4 class="font-bold text-lg gold-text mb-3 text-center">✨ Your Trading Copilot 🚀</h4>
+    
+    <!-- Chat history -->
+    <div id="chatHistory"
+         class="mb-3 bg-[#22242a]/70 rounded-lg p-3 overflow-y-auto"
+         style="max-height:280px; min-height:120px; backdrop-filter: blur(6px);">
+    </div>
+
+    <!-- Input & Send -->
+    <div class="flex gap-2 items-center">
+      <textarea id="chatInput"
+                class="flex-grow p-3 bg-[#2c2f36] text-sm text-white rounded-lg resize-none h-14 focus:outline-none focus:ring-2 focus:ring-[#ffc94d] overflow-hidden"
+                placeholder="Ask me about stocks, IPOs, or strategies..."></textarea>
+      <button id="sendBtn"
+              class="shrink-0 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-semibold px-4 py-2 rounded-lg shadow-md hover:from-yellow-400 hover:to-orange-400 transition">
+        Send
+      </button>
+    </div>
+
+    <p class="text-xs text-gray-400 mt-3 text-center">AI-powered assistant for trading insights & guidance.</p>
+    <p id="modelTag" class="text-[10px] text-gray-500 mt-1 text-center"></p>
+  </div>
+
+  <style>
+    /* Enhanced chat box */
+    .chat-box {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 380px;
+      background: rgba(27, 29, 34, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      padding: 1rem;
+      display: none;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      animation: fadeInUp 0.3s ease;
+    }
+    .chat-box.active { display: block; }
+
+    /* Chat bubbles */
+    #chatHistory div {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem;
+      margin-bottom: 0.5rem;
+      max-width: 85%;
+      word-wrap: break-word;
+      animation: fadeIn 0.25s ease;
+    }
+    #chatHistory .user {
+      background: linear-gradient(to right, #ffc94d, #facc15);
+      color: #0b0d10;
+      margin-left: auto;
+      text-align: right;
+    }
+    #chatHistory .bot {
+      background: #2f323b;
+      color: #f5f6f7;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    /* Animations */
+    @keyframes fadeIn { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform: translateY(0);} }
+    @keyframes fadeInUp { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+  </style>
+
+  </div>
+
+  <script>
+    function toggleChat() {
+      const chat = document.getElementById('chatBox');
+      chat.classList.toggle('active');
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('chatInput').addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    async function sendMessage() {
+  const inputElem = document.getElementById('chatInput');
+  const historyElem = document.getElementById('chatHistory');
+  const modelTag = document.getElementById('modelTag');
+  const msg = (inputElem.value || '').trim();
+  if (!msg) return;
+
+  // User bubble
+  const userDiv = document.createElement('div');
+  userDiv.className = "user";
+  userDiv.textContent = msg;
+  historyElem.appendChild(userDiv);
+  historyElem.scrollTop = historyElem.scrollHeight;
+  inputElem.value = '';
+
+  // Bot typing bubble
+  const botDiv = document.createElement('div');
+  botDiv.className = "bot";
+  botDiv.textContent = "⏳ Thinking...";
+  historyElem.appendChild(botDiv);
+  historyElem.scrollTop = historyElem.scrollHeight;
+
+  try {
+    const res = await fetch('/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: msg })
+    });
+
+    const data = await res.json();
+    const text = (data && data.response) ? data.response : "Sorry, no reply.";
+    botDiv.textContent = text;
+    if (data && data.model) modelTag.textContent = 'Model: ' + data.model;
+  } catch (e) {
+    botDiv.textContent = "⚠️ Error processing request.";
+  } finally {
+    historyElem.scrollTop = historyElem.scrollHeight;
+  }
+}
+
+  </script>
+</body>
+</html>
