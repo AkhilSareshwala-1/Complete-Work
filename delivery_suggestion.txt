@@ -1,0 +1,25 @@
+
+APOLLOHOSP	```json
+{
+  "investment_decision": "GOOD_FOR_INVESTMENT",
+  "reasoning": "The fundamental analysis indicates a 'Good' rating for Apollo Hospitals, highlighting strong revenue and net income growth, despite a high P/E ratio. Key metrics like ROE and debt-to-equity are missing, suggesting potential areas for further investigation. However, based on the available positive growth indicators and dividend yield, the stock appears promising for investment.",
+  "time_period": "Long Term (1+ years)",
+  "entry_price": "N/A (Technical analysis data is missing)",
+  "stop_loss": "N/A (Technical analysis data is missing)",
+  "target_price": [],
+  "risk_level": "Medium",
+  "additional_notes": "The absence of technical analysis data prevents the establishment of specific entry, stop-loss, and target prices. Investors should conduct their own technical analysis before making an investment decision. The 'Good' fundamental rating and strong growth metrics suggest a potential for capital appreciation over the long term."
+}
+```
+SHARDACROP	```json
+{
+  "investment_decision": "SHOULD_BE_AVOIDED",
+  "reasoning": "The technical analysis indicates mixed signals, with a long-term bullish trend (EMA200) but recent bearish momentum (EMA50, MACD). The fundamental analysis also presents conflicting information with a 'Good' rating but notes that the stock trades at a relatively high PE ratio and exhibits high volatility. The inconsistencies and prevailing bearish technical indicators suggest avoiding investment at this time.",
+  "time_period": null,
+  "entry_price": null,
+  "stop_loss": null,
+  "target_price": [],
+  "risk_level": null,
+  "additional_notes": null
+}
+```
